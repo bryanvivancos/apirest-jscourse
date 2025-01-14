@@ -8,6 +8,7 @@ API_KEY = "live_IY9QRJ4Y1JKrAHB11Cw8XQlHeRtHT2cS8gQXwY8j6YHuMtmORFFVJ44uhT5A2IDb
 
 const btn = document.querySelector("#refresh")
 const imageContainer = null|| document.getElementById("imgs")
+const uploadedContainer = null || document.getElementById("uploadedPhotos")
 const spanError = document.getElementById("span-error")
 const favImages = document.getElementById("favImages")
 //window.onload = fetchRandomAnimal();
@@ -171,6 +172,32 @@ async function uploadPhoto(){
 }
 
 
+// THUMBNAIL UPLOAD PHOTO
+
+async function thumbail() {
+    const form = document.getElementById("uploadPhoto")
+    const formData = new FormData(form)
+    //usamos el FileReader para sacar la información del archivo del formData
+    const reader = new FileReader();
+    //Este código es para borrar la miniatura anterior al actualizar el form.
+    if (form.children.length === 3) {
+        const preview = document.getElementById("preview")
+        form.removeChild(preview)
+    }
+        //aquí sucede la magia, el reader lee los datos del form.
+    reader.readAsDataURL(formData.get('file'))
+
+    //Éste código es para cuando termine de leer la info de la form, cree una imagen miniatura de lo que leyó el form.
+        reader.onload = () => {
+            const previewImage = document.createElement('img')
+            previewImage.id = "preview"
+            previewImage.width = 50
+            previewImage.src = reader.result
+            form.insertBefore(previewImage,form.children[0]);
+        }
+}
+
+
 //LOAD UPLOADED PHOTOS
 
 async function uploadedPhotos() {
@@ -192,7 +219,7 @@ async function uploadedPhotos() {
             <img src="${(ups.url)}" width="280" alt="Favorite Animal">
             `).join("")}`
         
-        uploadedPhotos.innerHTML = view
+        uploadedContainer.innerHTML = view
 
     } catch (error) {
         console.log(error);
